@@ -6,6 +6,5 @@ import { buildSubgraphSchema } from '@apollo/subgraph';
 export const server = new ApolloServer({
     schema: buildSubgraphSchema({ typeDefs, resolvers }),
     introspection: true
-    
 });
 

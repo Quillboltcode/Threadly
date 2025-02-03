@@ -1,0 +1,83 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  bio: String
+  profilePicture: String
+  followers: [User]
+  following: [User]
+  posts: [Post]
+}
+
+type Post {
+  id: ID!
+  content: String!
+  media: [String]
+  author: User!
+  tags: [Tag]
+  likes: [User]
+  comments: [Comment]
+  shares: [Share]
+  createdAt: String!
+}
+
+type Comment {
+  id: ID!
+  content: String!
+  author: User!
+  post: Post!
+  createdAt: String!
+}
+
+type Share {
+  id: ID!
+  user: User!
+  post: Post!
+  createdAt: String!
+}
+
+type Tag {
+  id: ID!
+  name: String!
+  posts: [Post]
+}
+
+type Discover {
+  trendingTags: [Tag]
+  popularPosts: [Post]
+  suggestedUsers: [User]
+}
+
+type Query {
+  getUser(id: ID!): User
+  searchUsers(query: String!): [User]
+  getPost(id: ID!): Post
+  getPostsByTag(tagId: ID!): [Post]
+  getPostsByUser(userId: ID!): [Post]
+  getFeed(userId: ID!): [Post]
+  discoverContent: Discover
+}
+
+type Mutation {
+  signup(username: String!, email: String!, password: String!): User
+  login(email: String!, password: String!): String
+  createPost(content: String!, media: [String], tags: [ID]): Post
+  deletePost(postId: ID!): Boolean
+  likePost(postId: ID!): Post
+  unlikePost(postId: ID!): Post
+  addComment(postId: ID!, content: String!): Comment
+  deleteComment(commentId: ID!): Boolean
+  sharePost(postId: ID!): Share
+  followUser(userId: ID!): User
+  unfollowUser(userId: ID!): User
+}
+
+type Subscription {
+  postLiked(postId: ID!): Post
+  postCommented(postId: ID!): Comment
+  postShared(postId: ID!): Share
+  userFollowed(userId: ID!): User
+  userUnfollowed(userId: ID!): User
+  trendingTagsUpdated: [Tag]
+  popularPostsUpdated: [Post]
+}
