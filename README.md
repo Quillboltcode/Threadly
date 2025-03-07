@@ -1,7 +1,7 @@
 # 🎉 [Threadly] - A Social Media Platform for Students 🎓  
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-[![Node.js](https://img.shields.io/badge/Node.js-v16+-green)](https://nodejs.org/)  
+[![Node.js](https://img.shields.io/badge/Node.js-v20+-green)](https://nodejs.org/)  
 [![MongoDB](https://img.shields.io/badge/MongoDB-v5+-green)](https://www.mongodb.com/)  
 
 ## 🚀 Overview  
@@ -22,6 +22,10 @@ Key Features:
 ### Frontend  
 - **React.js**: For building a dynamic and responsive user interface.  
 - **CSS/Material-UI/Tailwind**: Beautiful, modern, and consistent styling.  
+- **React Router|TanStack Router**: For managing client-side routing.
+- **React Hooks**: For state management and side effects.
+- **Axios**: For making HTTP requests to the backend.
+- **TanStack Query(React Query)**: For efficient data fetching and caching.
 
 ### Backend  
 - **Node.js**: Server-side runtime for handling requests efficiently.  
