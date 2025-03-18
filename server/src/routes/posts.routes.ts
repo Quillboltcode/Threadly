@@ -139,7 +139,7 @@ const router = Router();
  *         description: Not found
  *       500:
  *         description: Internal server error
- */router.post('/',authenticate('jwt'),handlePostImages,createPost);
+ */router.post('/',authenticate('jwt'), handlePostImages, createPost);
 
 /**
  * @swagger
@@ -173,7 +173,7 @@ const router = Router();
  *         description: Unauthorized to update this post
  *       404:
  *         description: Post not found
- */router.put('/:id', authenticate('jwt'),handlePostImages,updatePost);
+ */router.put('/:id', authenticate('jwt'), handlePostImages, updatePost);
 
 /**
  * @swagger
@@ -199,7 +199,7 @@ const router = Router();
  *       404:
  *         description: Post not found
  */
-router.delete('/:id', authenticate('jwt'),deletePost);
+router.delete('/:id', authenticate('jwt'), deletePost);
 
 /**
  * @swagger

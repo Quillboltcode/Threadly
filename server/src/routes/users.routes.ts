@@ -24,7 +24,7 @@ const router = Router();
  *         description: Unauthorized
  *       404:
  *         description: Not Found
- */router.get('/profile', getUserProfile, authenticate('jwt'));
+ */router.get('/profile',  authenticate('jwt'), getUserProfile);
 
 /**
  * @swagger
@@ -42,7 +42,7 @@ const router = Router();
  *       404:
  *         description: Not Found
  */
-router.put('/profile', updateProfile, authenticate('jwt'));
+router.put('/profile',  authenticate('jwt'), updateProfile);
 
 /**
  * @swagger
@@ -64,7 +64,7 @@ router.put('/profile', updateProfile, authenticate('jwt'));
  *         description: Success
  *       404:
  *         description: Not Found
- */router.get('/:id', getUserById, authenticate('jwt') );
+ */router.get('/:id', authenticate('jwt'), getUserById );
 
 
 /**
@@ -90,7 +90,7 @@ router.put('/profile', updateProfile, authenticate('jwt'));
   *         description: Unauthorized
   *       404:
   *         description: User not found
-  */router.post('/follow/:id', followUser, authenticate('jwt') );
+  */router.post('/follow/:id', authenticate('jwt'), followUser);
   
 /**
  * @swagger
@@ -106,6 +106,6 @@ router.put('/profile', updateProfile, authenticate('jwt'));
  *         description: Success
  *       401:
  *         description: Unauthorized
- */router.get('/suggestions', getUserSuggestions, authenticate('jwt') );
+ */router.get('/suggestions', authenticate('jwt'), getUserSuggestions );
 
 export default router;
