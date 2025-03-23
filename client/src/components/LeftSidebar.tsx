@@ -1,46 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { FaHome, FaSearch, FaBell, FaComment, FaStream, FaList, FaUser, FaCog, FaPen } from 'react-icons/fa';
+import React, {  } from 'react';
+import { FaHome, FaSearch, FaBell, FaComment, FaStream, FaList, FaUser, FaCog } from 'react-icons/fa';
 import { CiMenuBurger } from 'react-icons/ci';
-import  { Link } from '@tanstack/react-router';
+import { NavLink } from 'react-router';
+import { ScreenMode } from '../App';
+import NewPostButton from './NewPostButton';
 
 
-const LeftSidebar: React.FC = () => {
-  const [mode, setMode] = useState<"hidden" | "icon" | "full">("full");
-  // Function to update sidebar mode based on screen size
-  const updateMode = () => {
-    if (window.innerWidth < 640) setMode("hidden");
-    else if (window.innerWidth < 1024) setMode("icon");
-    else setMode("full");
-  };
+interface LeftSidebarProps {
+  mode: ScreenMode;
+  setMode: React.Dispatch<React.SetStateAction<ScreenMode>>;
+}
 
-  useEffect(() => {
-    updateMode();
-    window.addEventListener("resize", updateMode);
-    return () => window.removeEventListener("resize", updateMode);
-  }, []);
-
+const LeftSidebar: React.FC<LeftSidebarProps> = ({ mode ,setMode}) => {
   return (
-    <div className={`h-screen lg:ml-8 bg-gray-900 text-white flex flex-col transition-all duration-300
-      ${mode === "hidden" ? "w-0 overflow-hidden" : ""}
-      ${mode === "icon" ? "w-16" : ""}
-      ${mode === "full" ? "w-64" : ""}`}
+    <div
+      className={`h-screen lg:ml-8 bg-gray-900 text-white flex flex-col transition-all border-b border-b-gray-700 duration-300
+        ${mode === ScreenMode.Hidden ? 'w-0 overflow-hidden' : ''}
+        ${mode === ScreenMode.Icon ? 'w-16' : ''}
+        ${mode === ScreenMode.Full ? 'w-64' : ''}`}
     >
-      {/* Toggle button work in small screen */}
-      {mode === "hidden" && (
+      {/* Toggle button for small screens */}
+      {mode === ScreenMode.Hidden && (
         <button
           aria-label="Toggle Sidebar"
-          className="p-3 text-white bg-gray-900 hover:bg-gray-700 fixed top-4 left-4 rounded-md"
-          onClick={() => setMode("icon")}
+          className="p-3 text-white bg-gray-900 hover:bg-gray-700 fixed top-4 left-4 rounded-md z-[999]"
+          onClick={() => setMode(ScreenMode.Icon)}
         >
           <CiMenuBurger />
         </button>
       )}
 
-      <div className="flex items-center justify-items-start mb-6">
+      {/* Logo or Header */}
+      <div className="flex items-center justify-start mb-6">
         <div className="bg-blue-500 p-2 rounded-full">
           <FaHome />
         </div>
       </div>
+
       {/* Navigation */}
       <nav className="space-y-4">
         <SidebarItems icon={<FaHome />} text="Home" link="/" mode={mode} />
@@ -53,17 +49,8 @@ const LeftSidebar: React.FC = () => {
         <SidebarItems icon={<FaCog />} text="Settings" link="/settings" mode={mode} />
       </nav>
 
-      {mode === "full" && (
-        <div className="mt-8 justify-start flex items-center">
-          <button
-            aria-label="Create Post"
-            className="bg-blue-500 text-white mt-2 px-4 py-2 rounded-full flex items-center space-x-2"
-          >
-            <FaPen />
-            <span>New Post</span>
-          </button>
-        </div>
-      )}
+      {/* New Post Button */}
+      < NewPostButton mode={mode} />
     </div>
   );
 };
@@ -72,15 +59,21 @@ type SidebarItemProps = {
   icon: React.ReactNode;
   text: string;
   link: string;
-  mode: "hidden" | "icon" | "full";
+  mode: ScreenMode;
 };
 
 const SidebarItems: React.FC<SidebarItemProps> = ({ icon, text, link, mode }) => {
   return (
-    <Link to={link} className="flex items-center space-x-2 p-3 hover:bg-gray-700 cursor-pointer">
+    <NavLink
+      to={link}
+      className={({ isActive }: { isActive: boolean }) =>
+        `flex items-center space-x-2 p-3 hover:bg-gray-700 cursor-pointer ${isActive ? 'bg-gray-700' : ''
+        }`
+      }
+    >
       {icon}
-      {mode === "full" && <span className="whitespace-nowrap">{text}</span>}
-    </Link>
+      {mode === ScreenMode.Full && <span className="whitespace-nowrap">{text}</span>}
+    </NavLink>
   );
 };
 

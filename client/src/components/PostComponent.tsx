@@ -1,7 +1,7 @@
 import React from "react";
 import { FaComment, FaHeart, FaRetweet } from "react-icons/fa";
 
-interface PostProps {
+export interface PostProps {
   username: string;
   handle: string;
   timestamp: string;
@@ -11,7 +11,7 @@ interface PostProps {
   repostedBy?: string;
 }
 
-const Post: React.FC<PostProps> = ({
+const PostComponent: React.FC<PostProps> = ({
   username,
   handle,
   timestamp,
@@ -49,4 +49,4 @@ const Post: React.FC<PostProps> = ({
   );
 };
 
-export default Post;
+export default PostComponent;

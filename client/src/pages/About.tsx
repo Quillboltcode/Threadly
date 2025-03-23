@@ -1,7 +1,6 @@
 
-import { createFileRoute, FileRouteTypes } from '@tanstack/react-router';
-import React from 'react';
 
+import React from 'react';
 import { MdSchool, MdGroup, MdConnectWithoutContact } from 'react-icons/md';
 
 const About: React.FC = () => {
@@ -26,6 +25,4 @@ const About: React.FC = () => {
   );
 };
 
-export const Route: any = createFileRoute('/About')({
-  component: About,
-});
+export default About;
