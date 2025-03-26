@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
-import { User } from '../models/User';
-import { asyncHandler } from '../utils/AsyncHandler';
+
+import { User } from '../models/User.js';
+import { asyncHandler } from '../utils/AsyncHandler.js';
 
 // Get current user's profile
 export const getUserProfile = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const user = await User.findById(req.user._id);
     res.status(200).json(user);
   }
@@ -12,7 +12,7 @@ export const getUserProfile = asyncHandler(
 
 // Update user profile
 export const updateProfile = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       { $set: req.body },
@@ -24,7 +24,7 @@ export const updateProfile = asyncHandler(
 
 // Get user by ID
 export const getUserById = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -35,7 +35,7 @@ export const getUserById = asyncHandler(
 
 // Follow/Unfollow user
 export const followUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const userToFollow = await User.findById(req.params.id);
     const currentUser = await User.findById(req.user._id);
 
@@ -75,7 +75,7 @@ export const followUser = asyncHandler(
 // Get user suggestions
 
 export const getUserSuggestions = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const currentUser = await User.findById(req.user._id);
     const suggestions = await User.find({
       _id: { 

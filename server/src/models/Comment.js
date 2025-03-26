@@ -1,15 +1,15 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export interface IComment extends Document {
-  content: string;
-  author: mongoose.Schema.Types.ObjectId;
-  post: mongoose.Schema.Types.ObjectId;
-  image: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// export interface IComment extends Document {
+//   content: string;
+//   author: mongoose.Schema.Types.ObjectId;
+//   post: mongoose.Schema.Types.ObjectId;
+//   image: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 
-export const CommentSchema: Schema = new Schema({
+export const CommentSchema = new Schema({
   content: {
     type: String,
     required: true,
@@ -41,4 +41,4 @@ export const CommentSchema: Schema = new Schema({
   timestamps: true
 });
 
-export const Comment = mongoose.model<IComment>('Comment', CommentSchema);
+export const Comment = mongoose.model('Comment', CommentSchema);

@@ -1,29 +1,29 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  avatar?: string;
-  bio?: string;
-  isVerified: boolean;
-  role: 'user' | 'admin' | 'moderator';
-  followers: mongoose.Types.ObjectId[];
-  following: mongoose.Types.ObjectId[];
-  resetPasswordToken?: string;
-  resetPasswordExpire?: Date;
-  verificationToken?: string;
-  lastLogin?: Date;
-  isActive: boolean;
-  Provider: string;
-  createdAt: Date;
-  updatedAt: Date;
+// export interface IUser extends Document {
+//   username: string;
+//   email: string;
+//   password: string;
+//   firstName?: string;
+//   lastName?: string;
+//   avatar?: string;
+//   bio?: string;
+//   isVerified: boolean;
+//   role: 'user' | 'admin' | 'moderator';
+//   followers: mongoose.Types.ObjectId[];
+//   following: mongoose.Types.ObjectId[];
+//   resetPasswordToken?: string;
+//   resetPasswordExpire?: Date;
+//   verificationToken?: string;
+//   lastLogin?: Date;
+//   isActive: boolean;
+//   Provider: string;
+//   createdAt: Date;
+//   updatedAt: Date;
 
-}
+// }
 
-const UserSchema = new Schema<IUser>({
+const UserSchema = new Schema({
   username: {
     type: String,
     required: [true, 'Please add a username'],
@@ -82,4 +82,4 @@ const UserSchema = new Schema<IUser>({
 });
 
 
-export const User = mongoose.model<IUser>('User', UserSchema);
+export const User = mongoose.model('User', UserSchema);

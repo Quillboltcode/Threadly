@@ -4,8 +4,8 @@ import { getUserById,
     getUserSuggestions,
     getUserProfile,
     updateProfile
-} from '../controllers/user.controller';
-import { authenticate } from '../middleware/auth.middleware';
+} from '../controllers/user.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
 
 
 const router = Router();

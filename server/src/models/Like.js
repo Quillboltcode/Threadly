@@ -1,12 +1,12 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export interface ILike extends Document {
-  post: mongoose.Schema.Types.ObjectId;
-  user: mongoose.Schema.Types.ObjectId;
-  createdAt: Date;
-}
+// export interface ILike extends Document {
+//   post: mongoose.Schema.Types.ObjectId;
+//   user: mongoose.Schema.Types.ObjectId;
+//   createdAt: Date;
+// }
 
-const LikeSchema: Schema = new Schema({
+const LikeSchema = new Schema({
   post: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Post',
@@ -24,4 +24,4 @@ const LikeSchema: Schema = new Schema({
 // Compound index to ensure unique likes
 LikeSchema.index({ post: 1, user: 1 }, { unique: true });
 
-export const Like = mongoose.model<ILike>('Like', LikeSchema);
+export const Like = mongoose.model('Like', LikeSchema);

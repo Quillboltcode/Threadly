@@ -1,16 +1,17 @@
-import { Request, Response, NextFunction } from 'express';
-import { IPost, Post } from '../models/Post';
-import { Like } from '../models/Like';
-import { asyncHandler } from '../utils/AsyncHandler';
-import { User } from '../models/User';
 
+import { Post } from '../models/Post.js';
+import { Like } from '../models/Like.js';
+import { asyncHandler } from '../utils/AsyncHandler.js';
+import { User } from '../models/User.js';
+import { Comment } from '../models/Comment.js'
+import mongoose from "mongoose";
 
 // Get all posts
 export const getAllPosts = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     // Get query parameters with defaults
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10; // Default to 10 posts per page
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10; // Default to 10 posts per page
 
     // Ensure page and limit are valid
     if (page < 1 || limit < 1) {
@@ -61,7 +62,7 @@ export const getAllPosts = asyncHandler(
 
 // Get single post
 export const getPost = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const post = await Post.findById(req.params.id).populate('author');
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
@@ -72,7 +73,7 @@ export const getPost = asyncHandler(
 
 // Create post
 export const createPost = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     
     const { content } = req.body;
     const post = new Post({
@@ -87,7 +88,7 @@ export const createPost = asyncHandler(
 
 // Update post
 export const updatePost = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     const { content } = req.body;
     const post = await Post.findById(req.params.id);
     
@@ -107,7 +108,7 @@ export const updatePost = asyncHandler(
 
 // Delete post
 export const deletePost = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     const post = await Post.findById(req.params.id);
     
     if (!post) {
@@ -125,7 +126,7 @@ export const deletePost = asyncHandler(
 
 // Like/Unlike post
 export const toggleLike = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
@@ -155,31 +156,41 @@ export const toggleLike = asyncHandler(
 // Add comment to post
 // param: postId, content, author.
 export const addComment = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     const { content } = req.body;
     const post = await Post.findById(req.params.id);
     
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
+    console.log("User object in request:", req.user); 
     
-    const newComment = {
-        content,
-        image : req.file ? req.file.path : null,
-        author: req.user._id,
-        createdAt: new Date()
-      };
-      
-    post.comments.push(newComment as any);
+        // Ensure correct extraction of user ID
+    const userId = req.user.userId || req.user._id || req.user.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized: User ID missing" });
+    }
+
+    // Create a new comment using Mongoose model
+    const newComment = await Comment.create({
+      content,
+      image: req.file ? req.file.path : null,
+      author: userId, // Ensure ObjectId type
+      post: post._id,  // Ensure 'post' field is set correctly
+      createdAt: new Date(),
+    });
+    
+    post.comments.push(newComment);
     
     await post.save();
-    res.status(201).json(post);
+    res.status(201).json(newComment);
   }
 );
 
-export const getFeedPosts = asyncHandler(async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.limit as string) || 10;
+export const getFeedPosts = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page)  || 1 ;
+  const limit = parseInt(req.query.limit ) || 10;
   const skip = (page - 1) * limit;
 
   const currentUser = await User.findById(req.user._id);

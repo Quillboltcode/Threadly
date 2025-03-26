@@ -1,7 +1,8 @@
-import Express ,{ Router } from 'express';
-import { register,login, verify, logout } from '../controllers/auth.controller';
-import { authenticate, authorize, googleAuthCallback } from '../middleware/auth.middleware';
+import { Router } from 'express';
+import { register,login, verify, logout } from '../controllers/auth.controller.js';
+import { authenticate, authorize, googleAuthCallback } from '../middleware/auth.middleware.js';
 const router = Router();
+
 /**
  * @swagger
  * /api/auth/register:

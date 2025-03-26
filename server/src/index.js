@@ -4,15 +4,16 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 dotenv.config();
+
 import mongoose from "mongoose";
 import morgan from "morgan";
-import { setupSwagger } from "./swagger";
-import { initializePassport } from "./middleware/auth.middleware";
-import { Limiter } from "./middleware/limit.middleware";
-import { uploadImage } from "./middleware/upload.middleware";
-
-const app = express();
+import { setupSwagger } from "./swagger.js";
+import { initializePassport } from "./middleware/auth.middleware.js";
+import { Limiter } from "./middleware/limit.middleware.js";
+// import { uploadImage } from "./middleware/upload.middleware";
 console.log(process.env.NODE_ENV);
+const app = express();
+
 
 initializePassport(app);
 // Setup Limiter 
@@ -25,10 +26,19 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "common" : "combined"));
 app.use('/uploads', express.static('uploads'));
 
 // USE HELMET AND CORS MIDDLEWARES
+// app.use(
+//   cors({
+//     origin: ["*"], // Comma separated list of your urls to access your api. * means allow everything
+//     credentials: true, // Allow cookies to be sent with requests
+//   })
+// );
+
 app.use(
   cors({
-    origin: ["*"], // Comma separated list of your urls to access your api. * means allow everything
-    credentials: true, // Allow cookies to be sent with requests
+    origin: ["http://localhost:3000"], // Allow frontend origin
+    credentials: true, // Allow cookies and authorization headers
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   })
 );
 // app.use(helmet());
@@ -55,12 +65,12 @@ mongoose
   .then(() => {
     console.log("MongoDB connected to the backend successfully");
   })
-  .catch((err: Error) =>{ console.log(err); console.log(process.env.MONGODB_URL);
+  .catch((err) =>{ console.log(err); console.log(process.env.MONGODB_URL);
 });
 
-import authRoutes from './routes/auth.routes';
-import postRoutes from './routes/posts.routes';
-import userRoutes from './routes/users.routes';
+import authRoutes from './routes/auth.routes.js';
+import postRoutes from './routes/posts.routes.js';
+import userRoutes from './routes/users.routes.js';
 
 // Add routes
 app.use('/api/auth', authRoutes);

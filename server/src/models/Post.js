@@ -1,22 +1,21 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { IComment } from './Comment';
+// import { IComment } from './Comment';
 
 
-export interface IPost extends Document {
-  content: string;
-  author: mongoose.Schema.Types.ObjectId;
-  image?: string[];
-  comments: mongoose.Schema.Types.ObjectId[];
-  likes: mongoose.Schema.Types.ObjectId[];
-  likeCount: number;
-  commentCount: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// export interface IPost extends Document {
+//   content: string;
+//   author: mongoose.Schema.Types.ObjectId;
+//   image?: string[];
+//   comments: mongoose.Schema.Types.ObjectId[];
+//   likeCount: number;
+//   commentCount: number;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 // Document Size Limit
 // Documents in MongoDB must be smaller than 16 mebibytes.
 // Ref to comment in Post.ts instead of embedding document
-const PostSchema: Schema = new Schema({
+const PostSchema = new Schema({
   content: {
     type: String,
     required: true,
@@ -39,10 +38,6 @@ const PostSchema: Schema = new Schema({
     type: Number,
     default: 0
   },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Like'
-  }],
   likeCount: {
     type: Number,
     default: 0
@@ -51,4 +46,4 @@ const PostSchema: Schema = new Schema({
   timestamps: true
 });
 
-export const Post = mongoose.model<IPost>('Post', PostSchema);
+export const Post = mongoose.model('Post', PostSchema);

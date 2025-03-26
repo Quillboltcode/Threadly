@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
-import { User }  from '../models/User';
-import { hashPassword, comparePassword, createToken } from '../middleware/auth.middleware';
-import { asyncHandler } from '../utils/AsyncHandler';
+import { User } from '../models/User.js';
+import { hashPassword, comparePassword, createToken } from '../middleware/auth.middleware.js';
+import { asyncHandler } from '../utils/AsyncHandler.js';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
-export const register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+
+export const register = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   // Check if the user already exists
   const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -26,7 +25,7 @@ export const register = asyncHandler(async (req: Request, res: Response): Promis
   return;
 });
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     //validate the request body
@@ -59,11 +58,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export const verify = async (req: Request, res: Response): Promise<void> =>  {
+export const verify = async (req, res) =>  {
   try {
     const { token } = req.params;
     // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as { userId: string, role: "user" | "admin" | "moderator" };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) ;
     // Find the user
     const user = await User.findById(decoded.userId);
     if (!user) {
@@ -81,7 +80,7 @@ export const verify = async (req: Request, res: Response): Promise<void> =>  {
 }
 
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (req, res) => {
   try {
     // Clear the token from the client
     res.clearCookie('token');

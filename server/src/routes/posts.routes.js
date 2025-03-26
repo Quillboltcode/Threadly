@@ -7,9 +7,9 @@ import {
   deletePost,
   toggleLike,
   addComment
-} from '../controllers/post.controller';
-import { authenticate } from '../middleware/auth.middleware';
-import { handleCommentImage, handlePostImages } from '../middleware/upload.middleware';
+} from '../controllers/post.controller.js';
+import { authenticate } from '../middleware/auth.middleware.js';
+import { handleCommentImage, handlePostImages } from '../middleware/upload.middleware.js';
 
 
 const router = Router();
