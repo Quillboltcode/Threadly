@@ -1,40 +1,40 @@
 import { usePosts } from "../hooks/usePost";
-import TabNavigation from "../components/TabNavigation";
 import { Suspense } from "react";
 import { motion } from "framer-motion";
-import PostComponent, { PostProps } from "../components/PostComponent";
+import PostCard from "../components/PostCard";
+import { sanitizePost } from "../types/post";
+
+
+
 const Home = () => {
-  const { posts, loading } = usePosts();
-  
+  const { data, isLoading, isError } = usePosts();
+
+  if (isLoading) return <p className="text-center text-gray-400 mt-10">Loading...</p>;
+  if (isError) return <p className="text-center text-red-500 mt-10">Error fetching posts</p>;
+  const sanitizeData = data?.map((post) => sanitizePost(post))|| [];
   return (
-    <div className="mt-4">
-      <Suspense fallback={
-        <motion.div
-          initial={{ rotate: 0 }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity }}
-          className="w-8 h-8 rounded-full border-4 border-gray-500 border-t-transparent"
-        />
-      }>
-        {posts.length > 0 ? (
-          posts.map((post: PostProps) => (
-            <PostComponent
-              key={post.username} // or any other unique identifier
-              username={post.username}
-              handle={post.handle}
-              timestamp={post.timestamp}
-              content={post.content}
-              imageUrl={post.imageUrl}
-              isReposted={post.isReposted}
-              repostedBy={post.repostedBy}
-            />
-          ))
-        ) : (
-          <p>No posts available.</p>
-        )}
+    <div className="max-w-2xl md:w-full mx-auto p-4">
+      <h1 className="text-2xl font-bold text-white mb-4">Home</h1>
+      
+      {/* Posts List */}
+      <Suspense fallback={<p className="text-gray-400">Loading posts...</p>}>
+        <div className="space-y-4 w-full whitespace-nowrap overflow-x-auto">
+          {sanitizeData?.map((post) => (
+            <motion.div 
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PostCard post={post} />
+            </motion.div>
+          ))}
+        </div>
       </Suspense>
     </div>
   );
 };
+
+
 
 export default Home;

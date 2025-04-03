@@ -13,7 +13,9 @@ import NotFound from "./pages/NotFound";
 import "./index.css";
 import MessagePage from "./pages/Message";
 import SettingsPage from "./pages/Setting";
-
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from "./components/PrivateRoute";
+import Login from "./components/Login";
 const queryClient = new QueryClient();
 // Define routes using createBrowserRouter
 const router = createBrowserRouter([
@@ -21,11 +23,18 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />, // Main Layout Component
     children: [
+      { path: "", element: <Home /> },
       { path: "home", element: <Home /> },
-      { path: "profile", element: <Profile /> },
-      { path: "messages", element: <MessagePage />},
-      { path: "settings", element: <SettingsPage/>},
-      { path: "*", element: <NotFound /> }, // Correct placement for NotFound
+      { path: "login", element: <Login /> },
+      { 
+        element: <PrivateRoute />,
+        children: [
+          { path: "profile", element: <Profile /> },
+          { path: "messages", element: <MessagePage /> },
+          { path: "settings", element: <SettingsPage /> },
+        ] 
+      },
+      { path: "*", element: <NotFound /> }, 
     ],
   },
 ]);
@@ -36,7 +45,9 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
       </QueryClientProvider>
   </React.StrictMode>
 );

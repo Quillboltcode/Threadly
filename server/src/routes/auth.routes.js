@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register,login, verify, logout } from '../controllers/auth.controller.js';
+import { register,login, logout } from '../controllers/auth.controller.js';
 import { authenticate, authorize, googleAuthCallback } from '../middleware/auth.middleware.js';
 const router = Router();
 
@@ -27,7 +27,7 @@ const router = Router();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "john@example.com"
+ *                 example: "john.doe@example.com"
  *               password:
  *                 type: string
  *                 format: password
@@ -76,7 +76,7 @@ const router = Router();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "john@example.com"
+ *                 example: "john.doe@example.com"
  *               password:
  *                 type: string
  *                 format: password
@@ -115,46 +115,37 @@ const router = Router();
   *         description: Not authenticated
   */router.post('/logout', logout);
 
-  /**
-   * @swagger
-   * /api/auth/verify:
-   *   get:
-   *     summary: Verify user authentication token
-   *     tags:
-   *       - Authentication
-   *     security:
-   *       - bearerAuth: []
-   *     responses:
-   *       200:
-   *         description: Token is valid
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 user:
-   *                   type: object
-   *       401:
-   *         description: Invalid or expired token
-   */router.get('/verify', verify);
-
 
 // Google OAuth routes
 /**
  * @swagger
  * /api/auth/google:
- *  get:
- *    summary: Redirect to Google OAuth login page
- *    tags:
- *      - Authentication
- *    responses:
- *      200:
- *        description: Redirect to Google OAuth login page
- *      401:
- *        description: Unauthorized
- *      500:
- *        description: Internal server error
+ *   get:
+ *     summary: Redirect to Google OAuth Login
+ *     description: Redirects the user to Google's OAuth authentication page for login.
+ *     operationId: googleAuthRedirect
+ *     tags:
+ *       - Authentication
+ *     responses:
+ *       "302":
+ *         description: Redirects to Google login.
+ *         headers:
+ *           Location:
+ *             description: URL of the Google OAuth login page.
+ *             schema:
+ *               type: string
+ *       "500":
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while redirecting to Google OAuth."
  */router.get('/google', authenticate('google'));
+
 
 /**
  * @swagger

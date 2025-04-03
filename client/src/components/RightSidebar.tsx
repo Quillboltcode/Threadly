@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FaCircleNotch } from 'react-icons/fa'
 import ThemeToggle from './ThemeToggle';
 import { ScreenMode } from '../App';
-
+import { useCommonTags } from '../hooks/useCommonTags';
 
 interface RightSidebarProps {
   mode: ScreenMode;
@@ -11,15 +11,16 @@ interface RightSidebarProps {
 
 
 const RightSidebar: React.FC<RightSidebarProps> = ({ mode }) => {
-  const [trendingTopics, setTrendingTopics] = useState<string[]>([]);
+  const { data, error, isLoading } = useCommonTags();
 
-  useEffect(() => {
-    // Fetch sample data (Replace with actual API calls)
-    const fetchData = async () => {
-      setTrendingTopics(["ReactJS", "TailwindCSS", "GraphQL", "Frontend"]);
-    };
-    fetchData();
-  }, []);
+
+  if (isLoading){
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div
@@ -67,12 +68,12 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ mode }) => {
           <div className="mb-4">
             <h2 className="text-gray-400 mb-2">Trending</h2>
             <div className="flex flex-wrap gap-2">
-              {trendingTopics.map((topic, index) => (
+              {data?.map((tag) => (
                 <span
-                  key={index}
+                  key={tag.tag}
                   className="bg-gray-700 text-white px-2 py-1 rounded-full"
                 >
-                  {topic}
+                  {tag.tag}
                 </span>
               ))}
             </div>

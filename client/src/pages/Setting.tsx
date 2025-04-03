@@ -1,5 +1,6 @@
 import React from "react";
 import { FaUserPlus, FaUser, FaLock, FaHandPaper, FaImages, FaPaintBrush, FaUniversalAccess, FaLanguage, FaQuestionCircle, FaInfoCircle } from "react-icons/fa";
+import { useAuth } from '../contexts/AuthContext';
 
 const settingsOptions = [
   { icon: <FaUserPlus />, label: "Add another account" },
@@ -15,6 +16,11 @@ const settingsOptions = [
 ];
 
 const SettingsPage: React.FC = () => {
+  const { user, logout, isAuthenticated } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
   return (
     <div className="bg-gray-900 text-white flex w-full items-center justify-center">
       <div className="w-full max-w-md p-4">
@@ -44,7 +50,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
         <div className="mt-4 text-red-500 text-center py-2 cursor-pointer hover:text-red-600">
-          Sign out
+          Log out
         </div>
       </div>
     </div>

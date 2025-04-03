@@ -6,7 +6,8 @@ import {
   updatePost,
   deletePost,
   toggleLike,
-  addComment
+  addComment,
+  getMostFrequentTag
 } from '../controllers/post.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 import { handleCommentImage, handlePostImages } from '../middleware/upload.middleware.js';
@@ -44,7 +45,7 @@ const router = Router();
 
 /**
   * @swagger
-  * /api/posts/{id}:
+  * /api/posts/single/{id}:
   *   get:
   *     summary: Get a single post by ID
   *     tags:
@@ -97,7 +98,35 @@ const router = Router();
   *         description: Unauthorized to update this post
   *       404:
   *         description: Post not found
-  */router.get('/:id', getPost);
+  */router.get('/single/:id', getPost);
+
+/**
+ * @swagger
+ * /api/posts/tags:
+ *   get:
+ *     summary: Get the most common tags from posts
+ *     description: Returns the top 10 most frequently used tags in posts.
+ *     tags: [Posts]
+ *     responses:
+ *       200:
+ *         description: A list of the most common tags.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   tag:
+ *                     type: string
+ *                     example: "travel"
+ *                   count:
+ *                     type: integer
+ *                     example: 15
+ *       500:
+ *         description: Internal server error
+ */router.get('/tags', getMostFrequentTag);
+
 
 /**************************************************************************************************** */
 // private routes
@@ -124,6 +153,16 @@ const router = Router();
  *                 type: string
  *                 description: Post content
  *                 example: "This is my first post!"
+ *        multipart/form-data:
+ *          schema:
+ *            type: object
+ *            required: 
+ *              - image
+ *            properties:
+ *              image:
+ *                type: string
+ *                format: binary
+ *                description: Post image
  *     responses:
  *       201:
  *         description: Post created successfully

@@ -4,14 +4,18 @@ import { CiMenuBurger } from 'react-icons/ci';
 import { NavLink } from 'react-router';
 import { ScreenMode } from '../App';
 import NewPostButton from './NewPostButton';
+import { usePosts } from '../hooks/usePost';
 
 
 interface LeftSidebarProps {
   mode: ScreenMode;
   setMode: React.Dispatch<React.SetStateAction<ScreenMode>>;
+  children? : React.ReactNode;
 }
 
-const LeftSidebar: React.FC<LeftSidebarProps> = ({ mode ,setMode}) => {
+const LeftSidebar: React.FC<LeftSidebarProps> = ({ mode , setMode,children }) => {
+  // const { data, isLoading, isError } = usePosts();
+  // console.log(data)
   return (
     <div
       className={`h-screen lg:ml-8 bg-gray-900 text-white flex flex-col transition-all border-b border-b-gray-700 duration-300
@@ -39,7 +43,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ mode ,setMode}) => {
 
       {/* Navigation */}
       <nav className="space-y-4">
-        <SidebarItems icon={<FaHome />} text="Home" link="/" mode={mode} />
+        <SidebarItems icon={<FaHome />} text="Home" link="/Home" mode={mode} />
         <SidebarItems icon={<FaSearch />} text="Search" link="/search" mode={mode} />
         <SidebarItems icon={<FaBell />} text="Notifications" link="/notifications" mode={mode} />
         <SidebarItems icon={<FaComment />} text="Messages" link="/messages" mode={mode} />
@@ -49,8 +53,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ mode ,setMode}) => {
         <SidebarItems icon={<FaCog />} text="Settings" link="/settings" mode={mode} />
       </nav>
 
-      {/* New Post Button */}
-      < NewPostButton mode={mode} />
+      {mode === "full" && children}
     </div>
   );
 };

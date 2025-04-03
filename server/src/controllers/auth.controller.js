@@ -1,7 +1,9 @@
 import { User } from '../models/User.js';
 import { hashPassword, comparePassword, createToken } from '../middleware/auth.middleware.js';
 import { asyncHandler } from '../utils/AsyncHandler.js';
+import { sanitizeUser } from '../utils/sanitizerObj.js';
 import jwt from 'jsonwebtoken';
+
 
 export const register = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -21,7 +23,7 @@ export const register = asyncHandler(async (req, res) => {
   const token = createToken(savedUser._id.toString(), savedUser.role);
 
   // Send the token in the response 
-  res.status(201).json({token, user:savedUser});
+  res.status(201).json({token, user:sanitizeUser(savedUser) });
   return;
 });
 
@@ -49,7 +51,7 @@ export const login = async (req, res) => {
     // Generate a JWT token
     const token = createToken(user._id.toString(), user.role);
     // Send the token in the response
-    res.status(200).json({ token, username: user.username, role: user.role });
+    res.status(200).json({ token, user:sanitizeUser(user) });
     return ;
     }   catch (error) {
     console.error(error);
@@ -58,26 +60,7 @@ export const login = async (req, res) => {
   }
 }
 
-export const verify = async (req, res) =>  {
-  try {
-    const { token } = req.params;
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) ;
-    // Find the user
-    const user = await User.findById(decoded.userId);
-    if (!user) {
-      res.status(400).json({ message: 'Invalid token' });
-      return;
-    }
-    // Mark the user as verified
-    user.isVerified = true;
-    await user.save();
-    res.status(200).json({ message: 'User verified successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-}
+
 
 
 export const logout = async (req, res) => {

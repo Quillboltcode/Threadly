@@ -21,6 +21,7 @@ const PostSchema = new Schema({
     required: true,
     trim: true
   },
+  tags: { type: [String], default: [] },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

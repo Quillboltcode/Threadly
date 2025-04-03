@@ -70,7 +70,7 @@ const UserSchema = new Schema({
   lastLogin: Date,
   Provider: {
     type: String,
-    enum: ['local', 'google', 'facebook', 'twitter'],
+    enum: ['local', 'google'],
     default: 'local'
   },
   isActive: {

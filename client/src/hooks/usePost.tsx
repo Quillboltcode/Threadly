@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
-import { PostService } from "../services/Post";
-// import { Post } from "../types/post";
-import { PostProps } from "../components/PostComponent";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { PostService } from "../services/postServices";
+
 
 export const usePosts = () => {
-  const [posts, setPosts] = useState<PostProps[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await PostService.getPosts();
-      setPosts(response.data);
-      setLoading(false);
-    };
-    fetchPosts();
-    },[]);
-    return { posts, loading };
-    };
+  return useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const data = await PostService.getPosts();
+      return data;
+    },
+    placeholderData : keepPreviousData,
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+};

@@ -1,12 +1,13 @@
 
-import './App.css'
+import './App.css';
 import React, { useEffect, useState } from 'react';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import { Outlet } from 'react-router';
-import NewPostButton from './components/NewPostButton';
 import { debounce } from 'es-toolkit';
 import { Toaster } from 'react-hot-toast';
+import { PostBoxModal } from './components/PostBox';
+
 
 export enum ScreenMode {
   Hidden = 'hidden',
@@ -15,6 +16,7 @@ export enum ScreenMode {
 }
 
 const App: React.FC = () => {
+  const [isPostBoxOpen] = useState(false);
   const [leftSidebarMode, setLeftSidebarMode] = useState<ScreenMode>(() => {
     if (typeof window === "undefined") return ScreenMode.Full;
     if (window.innerWidth < 640) return ScreenMode.Hidden;
@@ -37,6 +39,7 @@ const App: React.FC = () => {
     else setRightSidebarMode(ScreenMode.Full);
   };
 
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleResize = debounce(updateMode, 100);
@@ -48,13 +51,15 @@ const App: React.FC = () => {
 
   return (
     <>
-    <div className="h-screen flex flex-row dark:bg-gray-900 dark:text-white bg-white text-black relative">
-      <LeftSidebar mode={leftSidebarMode} setMode={setLeftSidebarMode}/>
-
-      <div className='main md:w-1/2 w-full flex flex-col border border-gray-700'>
+<div className={`app ${isPostBoxOpen ? "" : ""} h-screen flex flex-row dark:bg-gray-900 dark:text-white bg-white text-black relative`}>
+      <LeftSidebar mode={leftSidebarMode} setMode={setLeftSidebarMode}>
+      </LeftSidebar>
+      <main className='main md:w-1/2 w-full flex flex-col border border-gray-700'>
           <Outlet />
-      </div>
-      {/* < NewPostButton mode={leftSidebarMode} /> */}
+      {/* Render PostBox Conditionally */}
+      </main>
+      <PostBoxModal mode={ScreenMode.Icon} isSidebar={true} />
+      {/* Render the NewPostButton in a Portal */}
       <RightSidebar  mode={rightSidebarMode} setMode={setRightSidebarMode}/>
       <Toaster position='top-right' />
     </div>

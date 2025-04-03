@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getUserById, 
     followUser, 
-    getUserSuggestions,
+    suggestions,
     getUserProfile,
     updateProfile
 } from '../controllers/user.controller.js';
@@ -46,7 +46,7 @@ router.put('/profile',  authenticate('jwt'), updateProfile);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/find/{id}:
  *   get:
  *     summary: Get user by id
  *     description: Get user by id
@@ -64,7 +64,7 @@ router.put('/profile',  authenticate('jwt'), updateProfile);
  *         description: Success
  *       404:
  *         description: Not Found
- */router.get('/:id', authenticate('jwt'), getUserById );
+ */router.get('/find/:id', authenticate('jwt'), getUserById );
 
 
 /**
@@ -106,6 +106,6 @@ router.put('/profile',  authenticate('jwt'), updateProfile);
  *         description: Success
  *       401:
  *         description: Unauthorized
- */router.get('/suggestions', authenticate('jwt'), getUserSuggestions );
+ */router.get('/suggestions', authenticate('jwt'), suggestions );
 
 export default router;
